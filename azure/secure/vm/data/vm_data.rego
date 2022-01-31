@@ -1,51 +1,28 @@
-package azure.vmlinux.data
-
-import data.exceptions as ex
+package azure.vm.data
 
 #List of all vms
-vm_total := { vm |
+vm_new := { vm |
 	resource := input.resource_changes[i]
-	resource.type == "azurerm_linux_virtual_machine"
+	regex.match(`^azurerm_[lw][a-z]*_virtual` , resource.type)
 	vm := resource.change.after.name
 } 
 
-#List of all vms that pass name
-vm_name := { vm |
+vm_old := { vm |
 	resource := input.resource_changes[i]
-	resource.type == "azurerm_linux_virtual_machine"
-	startswith(resource.change.after.name, "mytf")
+	resource.type == "azurerm_virtual_machine"
 	vm := resource.change.after.name
 } 
 
-#List of default vms that pass name
-vm_default := { vm | resource := input.resource_changes[i]
-	resource.type == "azurerm_linux_virtual_machine"
-	startswith(resource.change.after.name, "mytf")
-	resource.change.after.size == "Standard_F2" 
-	vm := resource.change.after.name
-}
-
-#List of all vms that pass name
-vm_exception := { vm | resource := input.resource_changes[i]
-	resource.type == "azurerm_linux_virtual_machine"
-	resource.change.after.name == ex.developer[j].name
-	resource.change.after.size == ex.developer[j].size
-	vm := resource.change.after.name
-}
-
-#List of all vms that have latest version
-vm_version := { vm |
+#7.1 Ensure Virtual Machines are utilizing Managed Disks
+vm_managed_new := { vm |
 	resource := input.resource_changes[i]
-	resource.type == "azurerm_linux_virtual_machine"
-    resource.change.after.source_image_reference[_].version == "latest"
-    vm := resource.change.after.name
-} 
-
-#List of all vms that have manged disk
-vm_managed := { vm |
-	resource := input.resource_changes[i]
-	resource.type == "azurerm_linux_virtual_machine"
+	regex.match(`^azurerm_[lw][a-z]*_virtual` , resource.type)
 	resource.change.after != null
     vm := resource.change.after.name
-
+} 
+vm_managed_old := { vm |
+	resource := input.resource_changes[i]
+	resource.type == "azurerm_virtual_machine"
+	resource.change.after.storage_os_disk[_].managed_disk_type != null
+    vm := resource.change.after.name
 } 
