@@ -17,8 +17,8 @@ count_total := count(d.monitor_total)
 log_create_policy_assignment {
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_monitor_activity_log_alert"
-	resource.change.after.criteria[_].category == "Administrative"
-	resource.change.after.criteria[_].operation_name == "Microsoft.Authorization/policyAssignments/write"	
+	lower(resource.change.after.criteria[_].category) == "administrative"
+	lower(resource.change.after.criteria[_].operation_name) == "microsoft.authorization/policyassignments/write"	
 } 
 deny[msg] {
 	not log_create_policy_assignment == true                                                                 
@@ -28,8 +28,8 @@ deny[msg] {
 log_delete_policy_assignment {
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_monitor_activity_log_alert"
-	resource.change.after.criteria[_].category == "Administrative"
-	resource.change.after.criteria[_].operation_name == "Microsoft.Authorization/policyAssignments/delete"	
+	lower(resource.change.after.criteria[_].category) == "administrative"
+	lower(resource.change.after.criteria[_].operation_name) == "microsoft.authorization/policyassignments/delete"	
 } 
 deny[msg] {
 	not log_delete_policy_assignment == true                                                                 
@@ -40,8 +40,8 @@ deny[msg] {
 log_create_update_nw_sec_group {
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_monitor_activity_log_alert"
-	resource.change.after.criteria[_].category == "Administrative"
-	resource.change.after.criteria[_].operation_name == "Microsoft.Network/networkSecurityGroups/write"	
+	lower(resource.change.after.criteria[_].category) == "administrative"
+	lower(resource.change.after.criteria[_].operation_name) == "microsoft.network/networksecuritygroups/write"	
 } 
 deny[msg] {
 	not log_create_update_nw_sec_group == true                                                                 
@@ -52,8 +52,8 @@ deny[msg] {
 log_delete_nw_sec_group {
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_monitor_activity_log_alert"
-	resource.change.after.criteria[_].category == "Administrative"
-	resource.change.after.criteria[_].operation_name == "Microsoft.Network/networkSecurityGroups/delete"	
+	lower(resource.change.after.criteria[_].category) == "administrative"
+	lower(resource.change.after.criteria[_].operation_name) == "microsoft.network/networksecuritygroups/delete"	
 } 
 deny[msg] {
 	not log_delete_nw_sec_group == true                                                                 
@@ -64,8 +64,8 @@ deny[msg] {
 log_create_update_nw_sec_group_rule {
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_monitor_activity_log_alert"
-	resource.change.after.criteria[_].category == "Administrative"
-	resource.change.after.criteria[_].operation_name == "Microsoft.Network/networkSecurityGroups/securityRules/write"	
+	lower(resource.change.after.criteria[_].category) == "administrative"
+	lower(resource.change.after.criteria[_].operation_name) == "microsoft.network/networksecuritygroups/securityrules/write"	
 }
 deny[msg] {
 	not log_create_update_nw_sec_group_rule == true                                                                 
@@ -76,8 +76,8 @@ deny[msg] {
 log_delete_nw_sec_group_rule {
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_monitor_activity_log_alert"
-	resource.change.after.criteria[_].category == "Administrative"
-	resource.change.after.criteria[_].operation_name == "Microsoft.Network/networkSecurityGroups/securityRules/delete"	
+	lower(resource.change.after.criteria[_].category) == "administrative"
+	lower(resource.change.after.criteria[_].operation_name) == "microsoft.network/networksecuritygroups/securityrules/delete"	
 }
 deny[msg] {
 	not log_delete_nw_sec_group_rule == true                                                                 
@@ -88,8 +88,8 @@ deny[msg] {
 log_create_update_security_sol {
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_monitor_activity_log_alert"
-	resource.change.after.criteria[_].category == "Security"
-	resource.change.after.criteria[_].operation_name == "Microsoft.Security/securitySolutions/write"	
+	lower(resource.change.after.criteria[_].category) == "security"
+	lower(resource.change.after.criteria[_].operation_name) == "microsoft.security/securitysolutions/write"	
 }
 deny[msg] {
 	not log_create_update_security_sol == true                                                                 
@@ -100,8 +100,8 @@ deny[msg] {
 log_delete_security_solution {
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_monitor_activity_log_alert"
-	resource.change.after.criteria[_].category == "Security"
-	resource.change.after.criteria[_].operation_name == "Microsoft.Security/securitySolutions/delete"	
+	lower(resource.change.after.criteria[_].category) == "security"
+	lower(resource.change.after.criteria[_].operation_name) == "microsoft.security/securitysolutions/delete"	
 }
 deny[msg] {
 	not log_delete_security_solution == true                                                                 
@@ -112,8 +112,8 @@ deny[msg] {
 log_create_update_sql_fw_rule {
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_monitor_activity_log_alert"
-	resource.change.after.criteria[_].category == "Administrative"
-	resource.change.after.criteria[_].operation_name == "Microsoft.Sql/servers/firewallRules/write"	
+	lower(resource.change.after.criteria[_].category) == "administrative"
+	lower(resource.change.after.criteria[_].operation_name) == "microsoft.sql/servers/firewallrules/write"	
 }
 deny[msg] {
 	not log_create_update_sql_fw_rule == true                                                                 

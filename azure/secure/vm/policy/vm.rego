@@ -2,7 +2,7 @@ package azure.secure.vm
 
 import data.azure.vm.data as d
 
-default managed_disks = false
+#default managed_disks = false
 
 count_total_virtual_machine = count(d.vm_new) + count(d.vm_old)
 #7.1 Ensure Virtual Machines are utilizing Managed Disks
