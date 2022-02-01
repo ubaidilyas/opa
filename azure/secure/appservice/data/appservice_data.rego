@@ -35,7 +35,7 @@ web_app_https := { app |
 web_app_latest_tls := { app |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_app_service"
-	resource.change.after.site_config[_].min_tls_version == "1.2"
+	to_number(resource.change.after.site_config[_].min_tls_version) == 1.2
 	app := resource.change.after.name
 } 
 
@@ -65,21 +65,21 @@ web_app_aad := { app |
 web_app_latest_php := { app |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_app_service"
-	resource.change.after.site_config[_].php_version == "7.4"
+	to_number(resource.change.after.site_config[_].php_version) == 7.4
 	app := resource.change.after.name
 } 
 #9.7 Ensure that 'Python version' is the latest, if used to run the web app
 web_app_latest_python := { app |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_app_service"
-	resource.change.after.site_config[_].python_version == "3.4"
+	to_number(resource.change.after.site_config[_].python_version) == 3.4
 	app := resource.change.after.name
 } 
 #9.8 Ensure that 'Java version' is the latest, if used to run the web app
 web_app_latest_java := { app |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_app_service"
-	resource.change.after.site_config[_].java_version == "1.8"
+	to_number(resource.change.after.site_config[_].java_version) == 1.8
 	app := resource.change.after.name
 } 
 #9.9 Ensure that 'HTTP Version' is the latest, if used to run the web app

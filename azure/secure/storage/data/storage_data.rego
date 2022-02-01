@@ -60,6 +60,6 @@ sa_microsoft_services := { sa |
 sa_soft_delete := { sa |
 	resource := input.resource_changes[_]
 	resource.type == "azurerm_storage_account"
-	resource.change.after.blob_properties[_].delete_retention_policy[0].days >= 7
+	to_number(resource.change.after.blob_properties[_].delete_retention_policy[0].days) >= 7
     sa := resource.change.after.name
 } 

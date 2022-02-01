@@ -99,7 +99,7 @@ db_sqlfwr := { db |
 nw_flow_log := { nw | 
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_network_watcher_flow_log"
-    resource.change.after.retention_policy[_].days >= 90
+    to_number(resource.change.after.retention_policy[_].days) >= 90
     nw := resource.change.after.network_watcher_name
 }
 

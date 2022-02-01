@@ -32,7 +32,7 @@ db_audit_sql := { db |
 db_audit_retention_sql := { db |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_sql_server"
-	resource.change.after.extended_auditing_policy[_].retention_in_days >= 90
+	to_number(resource.change.after.extended_auditing_policy[_].retention_in_days) >= 90
 	db := resource.change.after.name
 }
 
@@ -101,7 +101,7 @@ db_plogretention := { db |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_postgresql_configuration"
 	resource.change.after.name == "log_retention_days"
-	resource.change.after.value > 3
+	to_number(resource.change.after.value) > 3
 	db := resource.change.after.server_name
 } 
 
