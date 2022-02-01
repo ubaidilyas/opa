@@ -1,5 +1,7 @@
 package azure.appservice.data
 
+import data.exceptions as ex
+
 #List of all app service
 sapp_total := { sa |
 	resource := input.resource_changes[i]
@@ -13,6 +15,13 @@ sapp_auth := { app |
 	resource.change.after.auth_settings[_].enabled=true
     app := resource.change.after.name
 } 
+# Exception is required as it is undesirable for marketing and support websites
+sapp_auth_ex := { app |
+	resource := input.resource_changes[i]
+	resource.type == "azurerm_app_service"
+	resource.change.after.name == ex.websites[j].name
+    app := resource.change.after.name
+} 
 
 #9.2 Ensure web app redirects all HTTP traffic to HTTPS in Azure App Service
 web_app_https := { app |
@@ -21,6 +30,7 @@ web_app_https := { app |
 	resource.change.after.https_only=true
     app := resource.change.after.name
 } 
+
 #9.3 Ensure web app is using the latest version of TLS encryption (Automated)
 web_app_latest_tls := { app |
 	resource := input.resource_changes[i]
@@ -29,6 +39,7 @@ web_app_latest_tls := { app |
 	app := resource.change.after.name
 } 
 
+# TLS version by default is 1.2
 web_app_latest_default := { app |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_app_service"

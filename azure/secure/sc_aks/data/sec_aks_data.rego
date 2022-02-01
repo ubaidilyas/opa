@@ -28,6 +28,20 @@ kv_secret_total := { kv |
 	kv := resource.change.after.name
 } 
 
+sec_auto_pro_total := { sec |
+	resource := input.resource_changes[i]
+	resource.type == "azurerm_security_center_auto_provisioning"
+	sec := resource.name
+} 
+
+#2.11 Ensure that 'Automatic provisioning of monitoring agent' is set to 'On'
+sec_auto_pro := { sec |
+	resource := input.resource_changes[i]
+	resource.type == "azurerm_security_center_auto_provisioning"
+	resource.change.after.auto_provision == "On"
+	sec := resource.name
+} 	
+
 #8.1 Ensure that the expiration date is set on all keys
 kv_key_expire := { kv |
 	resource := input.resource_changes[i]

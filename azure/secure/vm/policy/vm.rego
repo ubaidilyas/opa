@@ -4,8 +4,10 @@ import data.azure.vm.data as d
 
 default managed_disks = false
 
+count_total_virtual_machine = count(d.vm_new) + count(d.vm_old)
 #7.1 Ensure Virtual Machines are utilizing Managed Disks
 managed_disks {
+	count_total_virtual_machine !=0
 	count(d.vm_new) + count(d.vm_old) == count(d.vm_managed_new) + count(d.vm_managed_old)
 }
 deny[msg] {   
