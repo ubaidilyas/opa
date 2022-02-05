@@ -5,12 +5,14 @@ package azure.storage.data
 sa_total := { sa |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_storage_account"
+	resource.change.actions[_] != "delete"
 	sa := resource.change.after.name
 } 
 
 sc_total := { sc |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_storage_container"
+	resource.change.actions[_] != "delete"
 	sc := resource.change.after.name
 } 
 

@@ -4,6 +4,7 @@ package azure.network.data
 nw_total_sg := { nw |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_network_security_group"
+	resource.change.actions[_] != "delete"
 	nw := resource.change.after.name
 } 
 
@@ -11,6 +12,7 @@ nw_total_sg := { nw |
 db_total_sql := { db |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_sql_server"
+	resource.change.actions[_] != "delete"
 	db := resource.change.after.name
 } 
 
@@ -18,6 +20,7 @@ db_total_sql := { db |
 nw_total_watcher := { nw |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_network_watcher_flow_log"
+	resource.change.actions[_] != "delete"
 	nw := resource.change.after.network_watcher_name
 }
 

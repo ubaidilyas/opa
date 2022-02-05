@@ -4,7 +4,8 @@ package azure.iam.data
 iam_total_roles := { iam |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_role_definition"
-    iam := resource.change.after.name
+  resource.change.actions[_] != "delete"
+  iam := resource.change.after.name
 } 
 
 #1.21 Ensure that no custom subscription owner roles are created

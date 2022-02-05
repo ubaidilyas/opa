@@ -6,6 +6,7 @@ import data.exceptions as ex
 sapp_total := { sa |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_app_service"
+	resource.change.actions[_] != "delete"
 	sa := resource.change.after.name
 } 
 #9.1 Ensure App Service Authentication is set on Azure App Service

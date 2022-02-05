@@ -5,18 +5,21 @@ package azure.db.data
 db_total_sql := { db |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_sql_server"
+	resource.change.actions[_] != "delete"
 	db := resource.change.after.name
 } 
 #List of postgresql db servers
 db_total_psql := { db |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_postgresql_server"
+	resource.change.actions[_] != "delete"
 	db := resource.change.after.name
 } 
 #List of postgresql db servers
 db_total_mysql := { db |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_mysql_server"
+	resource.change.actions[_] != "delete"
 	db := resource.change.after.name
 } 
 

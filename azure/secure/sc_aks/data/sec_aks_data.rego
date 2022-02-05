@@ -4,6 +4,7 @@ package azure.sec_aks.data
 aks_total := { aks |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_kubernetes_cluster"
+	resource.change.actions[_] != "delete"
 	aks := resource.change.after.name
 } 
 
@@ -11,6 +12,7 @@ aks_total := { aks |
 kv_total := { kv |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_key_vault"
+	resource.change.actions[_] != "delete"
 	kv := resource.change.after.name
 } 
 
@@ -18,6 +20,7 @@ kv_total := { kv |
 kv_key_total := { kv |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_key_vault_key"
+	resource.change.actions[_] != "delete"
 	kv := resource.change.after.name
 } 
 
@@ -25,12 +28,14 @@ kv_key_total := { kv |
 kv_secret_total := { kv |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_key_vault_secret"
+	resource.change.actions[_] != "delete"
 	kv := resource.change.after.name
 } 
 
 sec_auto_pro_total := { sec |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_security_center_auto_provisioning"
+	resource.change.actions[_] != "delete"
 	sec := resource.name
 } 
 

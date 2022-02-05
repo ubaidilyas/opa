@@ -4,12 +4,14 @@ package azure.vm.data
 vm_new := { vm |
 	resource := input.resource_changes[i]
 	regex.match(`^azurerm_[lw][a-z]*_virtual` , resource.type)
+	resource.change.actions[_] != "delete"
 	vm := resource.change.after.name
 } 
 
 vm_old := { vm |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_virtual_machine"
+	resource.change.actions[_] != "delete"
 	vm := resource.change.after.name
 } 
 
