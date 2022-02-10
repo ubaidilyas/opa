@@ -43,7 +43,7 @@ sec_auto_pro_total := { sec |
 sec_auto_pro := { sec |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_security_center_auto_provisioning"
-	resource.change.after.auto_provision == "On"
+	lower(resource.change.after.auto_provision) == "on"
 	sec := resource.name
 } 	
 

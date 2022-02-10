@@ -469,8 +469,10 @@ resource "azurerm_sql_firewall_rule" "sqlfwrule" {
   name                = "mytfsqlfwrule"
   resource_group_name = azurerm_resource_group.rg.name
   server_name         = azurerm_sql_server.sqlserver.name
-  start_ip_address    = "1.2.3.4"
-  end_ip_address      = "4.5.6.7"
+# start_ip_address    = "1.2.3.4"
+#  end_ip_address      = "4.5.6.7"  
+  start_ip_address    = "0.0.0.0"
+  end_ip_address      = "0.0.0.0"
 }
 
 #6.4 Ensure that Network Security Group Flow Log retention period is 'greater than 90 days'
@@ -662,6 +664,45 @@ resource "azurerm_key_vault" "kv" {
   }
 }
 
+
+data "azurerm_storage_account" "sa" {
+  name                = "mytfsaccount"
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
+data "azurerm_key_vault" "kv" {
+  name                = "mytfkv"
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
+
+# Regula only makes this rule true if the target_resource_id = azurerm_key_vault.kv.id // storage_account_id = azurerm_storage_account.sa.id
+# if we extract data and put in values as data.xxxx than it fails
+
+#resource "azurerm_monitor_diagnostic_setting" "example" {
+#  name               = "example"
+#  target_resource_id = azurerm_key_vault.kv.id
+#  storage_account_id = azurerm_storage_account.sa.id
+#
+#  log {
+#    category = "AuditEvent"
+#    enabled  = true
+#
+#    retention_policy {
+#      enabled = true
+#      days = 190
+#    }
+#  }
+#
+#  metric {
+#    category = "AllMetrics"
+#
+#    retention_policy {
+#     enabled = false
+#    }
+#  }
+#}
+
 resource "azurerm_key_vault_key" "good_example" {
   name            = "generated-certificate"
   key_vault_id    = azurerm_key_vault.kv.id
@@ -774,3 +815,34 @@ resource "azurerm_app_service" "appservice" {
     value = "Server=some-server.mydomain.com;Integrated Security=SSPI"
   }
 }
+
+
+resource "azurerm_function_app" "funcapp" {
+  name                       = "mytffuncapp"
+  location                   = azurerm_resource_group.rg.location
+  resource_group_name        = azurerm_resource_group.rg.name
+  app_service_plan_id        = azurerm_app_service_plan.appserviceplan.id
+
+
+  site_config {
+      ftps_state = "AllAllowed"
+
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+#################
+
+

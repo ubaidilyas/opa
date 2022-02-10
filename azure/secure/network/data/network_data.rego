@@ -93,10 +93,16 @@ source_addresses := {"*", "0.0.0.0", "0.0.0.0/0", "::/0", "internet", "any"}
 db_sqlfwr := { db |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_sql_firewall_rule"
-	resource.change.after.end_ip_address == "0.0.0.0"
+	helper_function_sqlfwr(resource.change.after)
 	resource.change.after.start_ip_address == "0.0.0.0"
 	db := resource.change.after.server_name
 } 
+
+helper_function_sqlfwr(base){
+	base.end_ip_address == "0.0.0.0"
+}{
+	base.end_ip_address == "255.255.255.255"
+}
 
 #6.4 Ensure that Network Security Group Flow Log retention period is 'greater than 90 days'
 nw_flow_log := { nw | 

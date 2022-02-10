@@ -14,6 +14,7 @@ import data.azure.appservice.data as d
 #default web_app_ftp_disable = false
 
 count_total := count(d.sapp_total)
+count_total_func := count(d.fapp_total)
 
 #9.1 Ensure App Service Authentication is set on Azure App Service
 sapp_authentication {
@@ -143,4 +144,14 @@ deny[msg] {
 	sapp_failed := d.sapp_total - d.web_app_ftp
     count(sapp_failed) != 0
 	msg := sprintf("'%v'failed to pass pre-defined 'web_app_ftp_disable' policy", [sapp_failed])         
+}
+
+func_app_ftp_disable {
+	count_total_func != 0
+	count_total_func == count(d.func_app_ftp)
+}
+deny[msg] {                                                                 
+	fapp_failed := d.fapp_total - d.func_app_ftp
+    count(fapp_failed) != 0
+	msg := sprintf("'%v'failed to pass pre-defined 'func_app_ftp_disable' policy", [fapp_failed])         
 }

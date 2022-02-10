@@ -19,5 +19,6 @@ iam_sub_owner := { iam |
 scope_sub(sub) {
   sub == "/"
 } {
+# Please refer https://docs.microsoft.com/en-us/rest/api/securitycenter/tasks/get-resource-group-level-task
   regex.match("^/subscriptions/[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$", sub)
 }

@@ -9,6 +9,16 @@ sapp_total := { sa |
 	resource.change.actions[_] != "delete"
 	sa := resource.change.after.name
 } 
+
+#List of all function app service
+fapp_total := { sa |
+	resource := input.resource_changes[i]
+	resource.type == "azurerm_function_app"
+	resource.change.actions[_] != "delete"
+	sa := resource.change.after.name
+} 
+
+
 #9.1 Ensure App Service Authentication is set on Azure App Service
 sapp_auth := { app |
 	resource := input.resource_changes[i]
@@ -59,7 +69,7 @@ web_app_client_cert := { app |
 web_app_aad := { app |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_app_service"
-	resource.change.after.identity[_].type == "UserAssigned"
+	lower(resource.change.after.identity[_].type) == "userassigned"
 	app := resource.change.after.name
 } 
 #9.6 Ensure that 'PHP version' is the latest, if used to run the web app
@@ -94,7 +104,13 @@ web_app_latest_http := { app |
 web_app_ftp:= { app |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_app_service"
-	allowed :=["FtpsOnly" , "Disabled"]
-	resource.change.after.site_config[_].ftps_state == allowed[_]
+	lower(resource.change.after.site_config[_].ftps_state) != "allallowed"
+	app := resource.change.after.name
+} 
+
+func_app_ftp:= { app |
+	resource := input.resource_changes[i]
+	resource.type == "azurerm_function_app"
+	lower(resource.change.after.site_config[_].ftps_state) != "allallowed"
 	app := resource.change.after.name
 } 

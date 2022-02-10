@@ -38,7 +38,7 @@ sa_queue_logging := { sa |
 sc_private_blob := { sc |
 	resource := input.resource_changes[_]
 	resource.type == "azurerm_storage_container"
-	resource.change.after.container_access_type == "private"
+	lower(resource.change.after.container_access_type) == "private"
     sc := resource.change.after.name
 } 
 
@@ -46,7 +46,7 @@ sc_private_blob := { sc |
 sa_deny_default := { sa |
 	resource := input.resource_changes[_]
 	resource.type == "azurerm_storage_account"
-	resource.change.after.network_rules[_].default_action == "Deny"
+	lower(resource.change.after.network_rules[_].default_action) == "deny"
     sa := resource.change.after.name
 }
 
@@ -54,14 +54,14 @@ sa_deny_default := { sa |
 sa_microsoft_services := { sa |
 	resource := input.resource_changes[_]
 	resource.type == "azurerm_storage_account"
-	resource.change.after.network_rules[_].bypass[_] == "AzureServices"
-    sa := resource.change.after.name
+	lower(resource.change.after.network_rules[_].bypass[_]) == "azureservices"
+	sa := resource.change.after.name
 } 
 
 #3.8 Ensure soft delete is enabled for Azure Storage
 sa_soft_delete := { sa |
 	resource := input.resource_changes[_]
 	resource.type == "azurerm_storage_account"
-	to_number(resource.change.after.blob_properties[_].delete_retention_policy[0].days) >= 7
+	to_number(resource.change.after.blob_properties[_].delete_retention_policy[_].days) >= 7
     sa := resource.change.after.name
 } 

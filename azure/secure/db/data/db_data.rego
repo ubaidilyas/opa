@@ -39,11 +39,11 @@ db_audit_retention_sql := { db |
 	db := resource.change.after.name
 }
 
-#4.2.1 Ensure that Advanced Threat Protection (ATP) on a SQL server is set to 'Enabled' (Automated)
+#4.2.1 Ensure that Advanced Threat Protection (ATP) on a SQL server is set to 'Enabled'
 db_atp_sql := { db |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_sql_server"
-	resource.change.after.threat_detection_policy[_].state == "Enabled"
+	lower(resource.change.after.threat_detection_policy[_].state) == "enabled"
 	db := resource.change.after.name
 } 
 
@@ -67,8 +67,8 @@ db_mysqlssl := { db |
 db_plogcheck := { db |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_postgresql_configuration"
-	resource.change.after.name == "log_checkpoints"
-	resource.change.after.value == "on"
+	lower(resource.change.after.name) == "log_checkpoints"
+	lower(resource.change.after.value) == "on"
 	db := resource.change.after.server_name
 } 
 
@@ -76,8 +76,8 @@ db_plogcheck := { db |
 db_plogconnect := { db |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_postgresql_configuration"
-	resource.change.after.name == "log_connections"
-	resource.change.after.value == "on"
+	lower(resource.change.after.name) == "log_connections"
+	lower(resource.change.after.value) == "on"
 	db := resource.change.after.server_name
 } 
 
@@ -85,8 +85,8 @@ db_plogconnect := { db |
 db_plogdisconnect := { db |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_postgresql_configuration"
-	resource.change.after.name == "log_disconnections"
-	resource.change.after.value == "on"
+	lower(resource.change.after.name) == "log_disconnections"
+	lower(resource.change.after.value) == "on"
 	db := resource.change.after.server_name
 } 
 
@@ -94,8 +94,8 @@ db_plogdisconnect := { db |
 db_plogthrottle := { db |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_postgresql_configuration"
-	resource.change.after.name == "connection_throttling"
-	resource.change.after.value == "on"
+	lower(resource.change.after.name) == "connection_throttling"
+	lower(resource.change.after.value) == "on"
 	db := resource.change.after.server_name
 } 
 
