@@ -44,11 +44,11 @@ Let us take rule number 3.1 of CIS benchmark for the sake of understanding the g
 
 ```
 #3.1 Ensure that 'Secure transfer required' is set to 'Enabled'
-sa_secure_transfer := { sa | 					            #name of the rule
-    resource := input.resource_changes[_] 			  #data filtering
-    resource.type == "azurerm_storage_account" 		#data filtering
+sa_secure_transfer := { sa |    #name of the rule
+    resource := input.resource_changes[_]   #data filtering
+    resource.type == "azurerm_storage_account"  #data filtering
     resource.change.after.enable_https_traffic_only == true #applying checks
-    sa := resource.change.after.name 				                #returning the name
+    sa := resource.change.after.name    #returning the name
 }
 ```
 
@@ -63,13 +63,13 @@ The name of the rule is just a string which can be set as per the will of the pr
 The policy section is where the list of total resources is compared with the resources that passed the check. If all the resources pass the defined check in data directory than there is no deny message and the flag is “true” otherwise the resource/s failing the checks are mentioned in the deny message. The code for policy section of rule 3.1 is shown in the Snippet \ref{code:policy}.
 
 ```
-secure_transfer_enabled { 						               #name of the flag
-    count_total_storage_account != 0 				           #checking count
-    count_total_storage_account == count(d.sa_secure_transfer) #comparing the lists
+secure_transfer_enabled {   #name of the flag
+    count_total_storage_account != 0    #checking count
+    count_total_storage_account == count(d.sa_secure_transfer)  #comparing the lists
 }
 deny[msg] {                                                                 
-    sa_failed := d.sa_total - d.sa_secure_transfer 	                                                #list of failed resources
-    count(sa_failed) != 0 			                                                                #no deny message if all pass
+    sa_failed := d.sa_total - d.sa_secure_transfer  #list of failed resources
+    count(sa_failed) != 0   #no deny message if all pass
     msg := sprintf("'%v'failed to pass pre-defined 'secure_transfer_enabled' policy", [sa_failed])  #returning deny message  
 }
 ```
@@ -99,7 +99,7 @@ In the general command above
 - -d flag is used to load policy into OPA.
 - -i flag is used to load input data i.e., the Terraform plan.
 
-The result from the “Query” stage is passed on to “Approval” stage. The “Approval” stage prompts with the results from previous stage which is shown in Figure below and waits for a response. The job proceeds according to the response provided and either deploys on the cloud or aborts the job. 
+The result from the “Query” stage is passed on to “Approval” stage. The “Approval” stage prompts with the results from previous stage which is shown in figure below and waits for a response. The job proceeds according to the response provided and either deploys on the cloud or aborts the job. 
 
 <img src="https://github.com/ubaidilyas/opa/blob/main/docs/img/jenkins_job.png" width="80%">
 
