@@ -101,5 +101,5 @@ In the general command above
 
 The result from the “Query” stage is passed on to “Approval” stage. The “Approval” stage prompts with the results from previous stage which is shown in Figure below and waits for a response. The job proceeds according to the response provided and either deploys on the cloud or aborts the job. 
 
-<img src="https://github.com/ubaidilyas/opa/blob/main/docs/img/jenkins_job.png" width="80">
+<img src="https://github.com/ubaidilyas/opa/blob/main/docs/img/jenkins_job.png" width="80%">
 
