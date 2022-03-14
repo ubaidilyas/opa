@@ -13,7 +13,7 @@ U-OPA is designed for static code analysis of the IaC scripts for automated comp
 U-OPA is designed for static code analysis of the IaC scripts for automated compliance with security checks configured as PaC. Currently, it scans Terraform IaC script managing resources on Azure Cloud for possible security threats explained in CIS Benchmark.
 
 Following is the complete workflow of U-OPA:
-
+[[https://github.com/ubaidilyas/opa/blob/main/docs/images/workflow_final.png|width=400px]]
 ![U-OPA](https://github.com/ubaidilyas/opa/blob/main/docs/images/workflow_final.png)
 
 Following steps are followed in the workflow:
