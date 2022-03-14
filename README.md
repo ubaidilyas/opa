@@ -63,18 +63,43 @@ The name of the rule is just a string which can be set as per the will of the pr
 The policy section is where the list of total resources is compared with the resources that passed the check. If all the resources pass the defined check in data directory than there is no deny message and the flag is “true” otherwise the resource/s failing the checks are mentioned in the deny message. The code for policy section of rule 3.1 is shown in the Snippet \ref{code:policy}.
 
 ```
-secure_transfer_enabled { 						                         #name of the flag
-    count_total_storage_account != 0 				                   #checking count
+secure_transfer_enabled { 						               #name of the flag
+    count_total_storage_account != 0 				           #checking count
     count_total_storage_account == count(d.sa_secure_transfer) #comparing the lists
 }
 deny[msg] {                                                                 
-    sa_failed := d.sa_total - d.sa_secure_transfer 	#list of failed resources
-    count(sa_failed) != 0 			                    #no deny message if all pass
-    msg := sprintf("'%v'failed to pass pre-defined 'secure_transfer_enabled' policy", [sa_failed])      		                       #returning deny message  
+    sa_failed := d.sa_total - d.sa_secure_transfer 	                                                #list of failed resources
+    count(sa_failed) != 0 			                                                                #no deny message if all pass
+    msg := sprintf("'%v'failed to pass pre-defined 'secure_transfer_enabled' policy", [sa_failed])  #returning deny message  
 }
 ```
 
 In the snippet above, name of the flag is just a string which can be anything as per the will of the practitioner, count is checked to be not equal to zero to avoid false positives and then lists are compared. Furthermore, in the deny section the names of the failed resources are extracted, count is verified to be not equal to zero to avoid false deny message and in the end deny message is returned with the names of the resource/s that failed.
 
 ## Policy Enforcement
+U-OPA extends a public Jenkinsfile which is a general way of running Terraform on Jenkins. The extended pipeline consists mainly of four sections.
+
+- Stages and steps for creating Terraform plan in JSON format.
+- “Query” stage where the plan from the previous stages is passed on to OPA.
+- “Approval” stage where the output of OPA is presented for approval.
+- Stages and steps for deployment on the cloud as per approval.
+
+A suitable automated way is running OPA as a docker container. The policies are stored in a version control system which are pulled in the Jenkins workspace in “Checkout” stage. Futhermore, the “Query” stage is configured using the command below.
+
+```
+docker run -v <jenkins_workspace>:<container_directory> \
+openpolicyagent/opa:0.37.1 eval \
+-d <container_directory> <policy_to_evaluate> \
+ -i <JSON_plan >
+```
+In the general command above
+- -v flag is used for volume mounting.
+- “openpolicyagent/opa:0.37.1” is the official docker image of OPA.
+- “eval” is a sub-command to evaluate Rego query.
+- -d flag is used to load policy into OPA.
+- -i flag is used to load input data i.e., the Terraform plan.
+
+The result from the “Query” stage is passed on to “Approval” stage. The “Approval” stage prompts with the results from previous stage which is shown in Figure below and waits for a response. The job proceeds according to the response provided and either deploys on the cloud or aborts the job. 
+
+<img src="https://github.com/ubaidilyas/opa/blob/main/docs/img/jenkins_job.png" width="40%">
 
