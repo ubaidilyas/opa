@@ -14,7 +14,7 @@ U-OPA is designed for static code analysis of the IaC scripts for automated comp
 
 Following is the complete workflow of U-OPA:
 
-![U-OPA](https://github.com/ubaidilyas/opa/docs/img/workflow_final.pdf)
+![U-OPA](https://github.com/ubaidilyas/opa/blob/main/docs/img/workflow_final.pdf)
 
 Following steps are followed in the workflow:
 - IaC script is converted to JSON by Terraform
