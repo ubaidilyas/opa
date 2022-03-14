@@ -46,7 +46,7 @@ web_app_https := { app |
 web_app_latest_tls := { app |
 	resource := input.resource_changes[i]
 	resource.type == "azurerm_app_service"
-	to_number(resource.change.after.site_config[_].min_tls_version) == 1.2
+	to_number(resource.change.after.site_config[_].min_tls_version) >= 1.2
 	app := resource.change.after.name
 } 
 
